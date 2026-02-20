@@ -1,0 +1,36 @@
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Document {
+    pub id: String,
+    pub title: String,
+    #[serde(default)]
+    pub text: String,
+    #[serde(default)]
+    pub emoji: Option<String>,
+    pub collection_id: Option<String>,
+    pub parent_document_id: Option<String>,
+    pub template: Option<bool>,
+    pub published_at: Option<String>,
+    pub created_at: Option<String>,
+    pub updated_at: Option<String>,
+    pub created_by: Option<UserRef>,
+    pub updated_by: Option<UserRef>,
+    pub revision: Option<i64>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct UserRef {
+    pub id: String,
+    pub name: Option<String>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SearchResult {
+    pub ranking: Option<f64>,
+    pub context: Option<String>,
+    pub document: Document,
+}
