@@ -23,13 +23,17 @@ pub async fn list(
         body["limit"] = json!(l);
     }
 
-    let docs: Vec<Document> = client.post("documents.list", &body).await?;
+    let mut docs: Vec<Document> = client.post("documents.list", &body).await?;
+    for d in &mut docs {
+        d.set_full_url(client.base_url());
+    }
     print_json(&docs);
     Ok(())
 }
 
 pub async fn get(client: &OutlineClient, id: &str) -> Result<(), AppError> {
-    let doc: Document = client.post("documents.info", &json!({ "id": id })).await?;
+    let mut doc: Document = client.post("documents.info", &json!({ "id": id })).await?;
+    doc.set_full_url(client.base_url());
     print_json(&doc);
     Ok(())
 }
@@ -48,7 +52,8 @@ pub async fn create(
         body["text"] = json!(t);
     }
 
-    let doc: Document = client.post("documents.create", &body).await?;
+    let mut doc: Document = client.post("documents.create", &body).await?;
+    doc.set_full_url(client.base_url());
     print_json(&doc);
     Ok(())
 }
@@ -67,7 +72,8 @@ pub async fn update(
         body["text"] = json!(t);
     }
 
-    let doc: Document = client.post("documents.update", &body).await?;
+    let mut doc: Document = client.post("documents.update", &body).await?;
+    doc.set_full_url(client.base_url());
     print_json(&doc);
     Ok(())
 }
@@ -114,7 +120,10 @@ pub async fn search(
         body["limit"] = json!(l);
     }
 
-    let results: Vec<SearchResult> = client.post("documents.search", &body).await?;
+    let mut results: Vec<SearchResult> = client.post("documents.search", &body).await?;
+    for r in &mut results {
+        r.document.set_full_url(client.base_url());
+    }
     print_json(&results);
     Ok(())
 }

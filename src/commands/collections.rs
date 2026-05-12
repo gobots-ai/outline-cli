@@ -32,9 +32,12 @@ pub async fn get(client: &OutlineClient, id: &str) -> Result<(), AppError> {
 }
 
 pub async fn documents(client: &OutlineClient, id: &str) -> Result<(), AppError> {
-    let tree: Vec<DocumentNode> = client
+    let mut tree: Vec<DocumentNode> = client
         .post("collections.documents", &json!({ "id": id }))
         .await?;
+    for node in &mut tree {
+        node.set_full_url(client.base_url());
+    }
     print_json(&tree);
     Ok(())
 }

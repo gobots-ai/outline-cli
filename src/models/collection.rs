@@ -22,5 +22,20 @@ pub struct DocumentNode {
     pub title: String,
     pub url: Option<String>,
     #[serde(default)]
+    pub url_id: Option<String>,
+    #[serde(default)]
+    pub full_url: Option<String>,
+    #[serde(default)]
     pub children: Vec<DocumentNode>,
+}
+
+impl DocumentNode {
+    pub fn set_full_url(&mut self, base_url: &str) {
+        if let Some(path) = &self.url {
+            self.full_url = Some(format!("{}{}", base_url.trim_end_matches('/'), path));
+        }
+        for child in &mut self.children {
+            child.set_full_url(base_url);
+        }
+    }
 }

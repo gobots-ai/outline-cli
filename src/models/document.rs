@@ -18,6 +18,20 @@ pub struct Document {
     pub created_by: Option<UserRef>,
     pub updated_by: Option<UserRef>,
     pub revision: Option<i64>,
+    #[serde(default)]
+    pub url_id: Option<String>,
+    #[serde(default)]
+    pub url: Option<String>,
+    #[serde(default)]
+    pub full_url: Option<String>,
+}
+
+impl Document {
+    pub fn set_full_url(&mut self, base_url: &str) {
+        if let Some(path) = &self.url {
+            self.full_url = Some(format!("{}{}", base_url.trim_end_matches('/'), path));
+        }
+    }
 }
 
 #[derive(Debug, Serialize, Deserialize)]

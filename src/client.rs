@@ -28,6 +28,10 @@ impl OutlineClient {
         }
     }
 
+    pub fn base_url(&self) -> &str {
+        &self.base_url
+    }
+
     pub async fn post<T: DeserializeOwned>(
         &self,
         endpoint: &str,
